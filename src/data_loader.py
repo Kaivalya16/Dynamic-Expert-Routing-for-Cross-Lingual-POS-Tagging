@@ -6,7 +6,9 @@ UPOS_TAGS = [
     "ADJ", "ADP", "ADV", "AUX", "CCONJ", "DET", "INTJ", "NOUN", 
     "NUM", "PART", "PRON", "PROPN", "PUNCT", "SCONJ", "SYM", "VERB", "X"
 ]
+
 TAG2ID = {tag: idx for idx, tag in enumerate(UPOS_TAGS)}
+ID2TAG = {idx: tag for tag, idx in TAG2ID.items()} # Add this line!
 NUM_LABELS = len(UPOS_TAGS)
 
 class CrossLingualPOSDataset(Dataset):
@@ -23,7 +25,7 @@ class CrossLingualPOSDataset(Dataset):
         self._parse_conllu(conllu_file_path)
 
         # 2. Build a tag-to-ID mapping (e.g., {'NOUN': 0, 'VERB': 1, ...})
-        self.tag2id = self._build_tag_vocab()
+        self.tag2id = TAG2ID
 
     def _parse_conllu(self, filepath):
         """
@@ -119,9 +121,27 @@ class CrossLingualPOSDataset(Dataset):
         # Squeeze out the batch dimension added by the tokenizer
         item = {key: val.squeeze(0) for key, val in tokenized_inputs.items()}
         item['labels'] = torch.tensor(label_ids)
-        item['typo_vector'] = self.typo_vector # Inject the language feature!
+        item['typo_vecs'] = self.typo_vector # Inject the language feature!
         
         return item
+    
+from torch.utils.data import DataLoader
+
+def get_dataloaders(filepath, lang_code, typo_vectors, batch_size=32, tokenizer_name='xlm-roberta-base'):
+    """
+    Creates and returns a DataLoader for a given dataset.
+    Returns (None, dataloader) to match the unpack signature in the training script.
+    """
+    dataset = CrossLingualPOSDataset(
+        conllu_file_path=filepath, 
+        lang_code=lang_code, 
+        typo_vectors=typo_vectors, 
+        tokenizer_name=tokenizer_name
+    )
+    
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
+    
+    return None, dataloader
     
 
 if __name__ == "__main__":
