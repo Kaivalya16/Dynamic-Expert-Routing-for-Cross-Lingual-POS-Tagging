@@ -1,0 +1,79 @@
+Running the following version of UD tools:
+commit 26e6c87a2f518322d15901a351199b6be6569062
+Author: Dan Zeman <zeman@ufal.mff.cuni.cz>
+Date:   Fri Nov 7 15:39:58 2025 +0100
+Evaluating the following revision of UD_Finnish-TDT:
+commit cce5e9bd84cc431d1cd591199f3f134f5a11230f
+Merge: 5e3a88a fe6aa88
+Author: Dan Zeman <zeman@ufal.mff.cuni.cz>
+CoNLL-U data file regular expression = '(.+)-ud-(train|dev|test)\.conllu'
+Language-treebank code (from CoNLL-U file name) = 'fi_tdt'
+Language code (from CoNLL-U file name) = 'fi'
+Found the following data files: fi_tdt-ud-dev.conllu, fi_tdt-ud-test.conllu, fi_tdt-ud-train.conllu
+Size: counted 202193 of 202193 words (nodes).
+Size: min(0, log((N/1000)**2)) = 10.6184453735964.
+Size: maximum value 13.815511 is for 1000000 words or more.
+Split: Found more than 10000 training words.
+Split: Found at least 10000 development words.
+Split: Found at least 10000 test words.
+Lemmas: source of annotation (from README) factor is 1.
+Universal POS tags: 15 out of 17 found in the corpus.
+Universal POS tags: source of annotation (from README) factor is 0.8.
+Features: 146191 out of 202193 total words have one or more features.
+Features: source of annotation (from README) factor is 0.8.
+Universal relations: 32 out of 37 found in the corpus.
+Universal relations: source of annotation (from README) factor is 1.
+Genres: found 6 out of 18 known.
+/net/work/people/zeman/unidep/tools/validate.py --lang fi --max-err=10 UD_Finnish-TDT/fi_tdt-ud-dev.conllu
+[Line 171 Sent b204.13]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 184 Sent b204.14]: [L3 Warning verbform-fin-without-mood] Finite verb 'eivät' lacks the 'Mood' feature
+[Line 244 Sent b204.18]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 280 Sent b204.20]: [L3 Warning verbform-fin-without-mood] Finite verb 'en' lacks the 'Mood' feature
+[Line 320 Sent b204.22]: [L3 Warning fixed-without-extpos] Fixed expression 'tai sitten' does not have the 'ExtPos' feature
+[Line 446 Sent b204.31]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 502 Sent b204.34]: [L3 Warning verbform-fin-without-mood] Finite verb 'En' lacks the 'Mood' feature
+[Line 548 Sent b204.37]: [L3 Warning verbform-fin-without-mood] Finite verb 'Eivätkö' lacks the 'Mood' feature
+[Line 925 Sent b504.3]: [L3 Warning fixed-without-extpos] Fixed expression 'itse asiassa' does not have the 'ExtPos' feature
+[Line 963 Sent b504.4]: [L3 Warning verbform-fin-without-mood] Finite verb 'eivät' lacks the 'Mood' feature
+...suppressing further errors regarding Warning
+Warnings: 287
+*** PASSED ***
+/net/work/people/zeman/unidep/tools/validate.py --lang fi --max-err=10 UD_Finnish-TDT/fi_tdt-ud-test.conllu
+[Line 340 Sent b306.4]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 380 Sent b401.2]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 386 Sent b401.2]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 481 Sent b401.6]: [L3 Warning fixed-without-extpos] Fixed expression 'päällisin puolin' does not have the 'ExtPos' feature
+[Line 512 Sent b401.8]: [L3 Warning verbform-fin-without-mood] Finite verb 'emme' lacks the 'Mood' feature
+[Line 528 Sent b401.9]: [L3 Warning verbform-fin-without-mood] Finite verb 'en' lacks the 'Mood' feature
+[Line 552 Sent b401.10]: [L3 Warning verbform-fin-without-mood] Finite verb 'en' lacks the 'Mood' feature
+[Line 562 Sent b401.11]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 723 Sent b401.19]: [L3 Warning verbform-fin-without-mood] Finite verb 'Eivät' lacks the 'Mood' feature
+[Line 782 Sent b401.21]: [L3 Warning pron-det-without-prontype] The word 'toisen' is tagged 'PRON' but it lacks the 'PronType' feature
+...suppressing further errors regarding Warning
+Warnings: 324
+*** PASSED ***
+/net/work/people/zeman/unidep/tools/validate.py --lang fi --max-err=10 UD_Finnish-TDT/fi_tdt-ud-train.conllu
+[Line 104 Sent b102.4]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 199 Sent b105.3]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 200 Sent b105.3]: [L3 Warning fixed-without-extpos] Fixed expression 'sen suuremmin' does not have the 'ExtPos' feature
+[Line 242 Sent b105.5]: [L3 Warning fixed-without-extpos] Fixed expression 'ikään kuin' does not have the 'ExtPos' feature
+[Line 429 Sent b105.15]: [L3 Warning pron-det-without-prontype] The word 'itseään' is tagged 'PRON' but it lacks the 'PronType' feature
+[Line 447 Sent b105.16]: [L3 Warning verbform-fin-without-mood] Finite verb 'ei' lacks the 'Mood' feature
+[Line 462 Sent b105.17]: [L3 Warning verbform-fin-without-mood] Finite verb 'eikä' lacks the 'Mood' feature
+[Line 584 Sent b108.5]: [L3 Warning pron-det-without-prontype] The word 'joka' is tagged 'PRON' but it lacks the 'PronType' feature
+[Line 611 Sent b108.7]: [L3 Warning fixed-without-extpos] Fixed expression 'saman tien' does not have the 'ExtPos' feature
+[Line 712 Sent b108.13]: [L3 Warning pron-det-without-prontype] The word 'itseäni' is tagged 'PRON' but it lacks the 'PronType' feature
+...suppressing further errors regarding Warning
+Warnings: 2599
+*** PASSED ***
+Validity: 1
+(weight=0.111111111111111) * (score{features}=0.8) = 0.0888888888888889
+(weight=0.111111111111111) * (score{genres}=0.333333333333333) = 0.037037037037037
+(weight=0.111111111111111) * (score{lemmas}=1) = 0.111111111111111
+(weight=0.37037037037037) * (score{size}=0.768588705357337) = 0.28466248346568
+(weight=0.0740740740740741) * (score{split}=1) = 0.0740740740740741
+(weight=0.111111111111111) * (score{tags}=0.705882352941177) = 0.0784313725490196
+(weight=0.111111111111111) * (score{udeprels}=0.864864864864865) = 0.0960960960960961
+(TOTAL score=0.770301063221907) * (availability=1) * (validity=1) = 0.770301063221907
+STARS = 4
+UD_Finnish-TDT	0.770301063221907	4
