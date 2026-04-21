@@ -1,11 +1,11 @@
 import torch
 import torch.optim as optim
-from torch.utils.data import DataLoader
+import sys
+import os
 
-# Import your existing data utilities (assuming these exist from your previous code)
-# from src.data_loader import get_dataloaders, NUM_LABELS, TYPO_VECTOR_SIZE
-
-# Import the new RL model and training loop
+# Ensure we can import from the parent src folder
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from src.data_loader import get_dataloaders
 from model_rl import RLTypologyMoE
 from train_rl import train_rl_epoch
 
@@ -13,56 +13,55 @@ def main():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Starting RL Training on: {device}")
     
-    # 1. Setup Model and Data
-    # train_loader, val_loader = get_dataloaders(...) # Use your existing loader
-    num_labels = 17 # UPOS tags
-    num_experts = 4
-    typo_vec_size = 65
+    # ==========================================
+    # 1. SETUP DATA (UPDATE THIS PATH!)
+    # ==========================================
+    print("Loading training data...")
+    train_path = "./data/raw/en_ewt-ud-train.conllu" # <-- Point this to your training data!
+    typo_vectors = torch.load("./data/processed/typology_vectors.pt")
     
+    # Assuming 'eng' for the source language for now, adjust as needed
+    _, train_loader = get_dataloaders(train_path, "eng", typo_vectors, batch_size=32)
+    
+    # ==========================================
+    # 2. SETUP MODEL
+    # ==========================================
+    num_labels, num_experts, typo_vec_size = 17, 4, 65
     model = RLTypologyMoE(num_labels, num_experts, typo_vec_size).to(device)
     
     # ==========================================
     # PHASE 1: FROZEN BACKBONE (Warm-up)
     # ==========================================
     print("\n--- PHASE 1: Frozen Training (Warming up RL Agent & Experts) ---")
-    
-    # Freeze XLM-RoBERTa
     for param in model.encoder.parameters():
         param.requires_grad = False
         
-    # Optimizer only updates the Router and Experts
-    optimizer_phase1 = optim.AdamW(
-        [p for p in model.parameters() if p.requires_grad], 
-        lr=5e-5
-    )
+    optimizer_phase1 = optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=5e-5)
     
     epochs_phase1 = 3
     for epoch in range(epochs_phase1):
-        print(f"\nEpoch {epoch+1}/{epochs_phase1}")
-        # train_rl_epoch(model, train_loader, optimizer_phase1, device)
-        print("Training loop complete (Placeholder for actual execution)")
+        print(f"\nPhase 1 - Epoch {epoch+1}/{epochs_phase1}")
+        # ACTUALLY RUNNING THE TRAINING LOOP NOW!
+        train_rl_epoch(model, train_loader, optimizer_phase1, device) 
         
     # ==========================================
     # PHASE 2: UNFROZEN (Full Fine-Tuning)
     # ==========================================
     print("\n--- PHASE 2: Unfrozen Training (Deep Structural Alignment) ---")
-    
-    # Unfreeze XLM-RoBERTa
     for param in model.encoder.parameters():
         param.requires_grad = True
         
-    # Optimizer updates the ENTIRE network at a much lower learning rate
     optimizer_phase2 = optim.AdamW(model.parameters(), lr=1e-5)
     
     epochs_phase2 = 5
     for epoch in range(epochs_phase2):
-        print(f"\nEpoch {epoch+1}/{epochs_phase2}")
-        # train_rl_epoch(model, train_loader, optimizer_phase2, device)
-        print("Training loop complete (Placeholder for actual execution)")
+        print(f"\nPhase 2 - Epoch {epoch+1}/{epochs_phase2}")
+        # ACTUALLY RUNNING THE TRAINING LOOP NOW!
+        train_rl_epoch(model, train_loader, optimizer_phase2, device)
         
-    # Save the RL model
+    # Save the properly trained RL model
     torch.save(model.state_dict(), "./checkpoints/tymoe_rl_unfrozen.pt")
-    print("RL Model Saved!")
+    print("Trained RL Model Saved!")
 
 if __name__ == "__main__":
     main()
